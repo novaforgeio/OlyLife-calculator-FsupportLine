@@ -324,8 +324,6 @@ var MAIN = [
 ];
 var SUB = [
   {id:"OLY-GEL-001", name:"P90+専用ジェル",   price:500, pv:375},
-  {id:"OLY-HCA005",  name:"A9",               price:500, pv:375},
-  {id:"OLY-PKG004",  name:"GALAXY",           price:500, pv:375},
   {id:"OLY-TPC003",  name:"VITALITY WAND",    price:600, pv:375},
   {id:"OLY-SL-6-P",  name:"SKYLINE",          price:500, pv:375}
 ];
@@ -334,7 +332,7 @@ var CUSTOMER_FEE_USD = 100;
 var CUSTOMER_FEE_JPY = 15400;
 var TYPE_INFO = {
   "new":      "📋 新規登録：商品代金＋カスタマー料＋送料がかかります。「必須商品」から1点を必ずお選びください。",
-  "new-base": "📋 新規登録（ベースセンター）：すでに会員登録済みの方がベースセンターを開設する登録です。商品代金＋カスタマー料＋送料がかかります。商品の制限はありません。",
+  "new-base": "📋 新規登録（ベースセンター）：すでに会員登録済みの方がベースセンター（自身の2つ目以降のポジション）を登録です。商品代金＋カスタマー料＋送料がかかります。商品の制限はありません。",
   "add":      "📋 追加登録（アップグレード）：商品代金＋送料のみです。カスタマー料はかかりません。商品の制限もありません。"
 };
 var qty = {};
@@ -379,7 +377,7 @@ function makeCard(p, disabled){
   }
   var nm = document.createElement("div"); nm.className="product-name"; nm.textContent=p.name; card.appendChild(nm);
   var pp = document.createElement("div"); pp.className="product-pv-price";
-  var rate=parseFloat(document.getElementById("exchangeRate").value)||170;
+  var rate=parseFloat(document.getElementById("exchangeRate").value)||165;
   var shp=parseFloat(document.getElementById("countrySelect").value)/100;
   var displayUsd=p.price*(1+shp);
   pp.innerHTML = "<div class='prod-price' data-usd='"+p.price+"'>$"+Math.round(displayUsd).toLocaleString()+"</div><div class='prod-yen' data-usd='"+p.price+"'>¥"+Math.round(displayUsd*rate).toLocaleString()+"</div><div class='prod-pv'>"+p.pv.toLocaleString()+" PV</div>";
