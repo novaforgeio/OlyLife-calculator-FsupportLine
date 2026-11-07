@@ -176,6 +176,35 @@ select:focus{outline:none;border-color:var(--navy);}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
 
+
+
+.pay-guide-lead{margin:.7rem 0 .6rem}
+.pay-guide-body b{color:var(--navy);font-weight:700}
+.pay-guide-body p{margin:.3rem 0}
+.pay-guide-body ul{margin:.25rem 0 0 1.1rem;padding:0}
+.pay-guide-body li{margin:.15rem 0}
+.pg-card{border:1px solid var(--line);border-left:3px solid var(--navy);border-radius:4px;padding:.6rem .75rem;margin:.55rem 0;background:#fafafa}
+.pg-head{font-weight:700;color:var(--navy);font-size:.86rem;margin-bottom:.25rem;display:flex;align-items:center;gap:.4rem}
+.pg-ico{font-size:1rem}
+.pg-addr{background:#fff;border:1px dashed var(--line);border-radius:4px;padding:.55rem .65rem;margin:.35rem 0 .5rem}
+.pg-addr-lbl{font-size:.7rem;font-weight:700;color:var(--navy);letter-spacing:.06em}
+.pg-addr code{display:block;font-family:"DM Mono",ui-monospace,Menlo,monospace;font-size:.78rem;word-break:break-all;color:#111;margin:.15rem 0 .45rem}
+.pg-copy{font-family:inherit;font-size:.74rem;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--navy);border-radius:4px;padding:.35rem .7rem;cursor:pointer}
+.pg-copy.done{background:var(--navy);color:#fff}
+.pg-line{display:block;text-align:center;margin:.8rem 0 .2rem;padding:.75rem 1rem;border-radius:4px;background:#06C755;color:#fff;font-weight:700;font-size:.86rem;text-decoration:none}
+
+.pg-open{display:block;width:100%;margin:.6rem 0 0;padding:.75rem 1rem;border-radius:4px;border:1px solid var(--navy);background:#fff;color:var(--navy);font-family:inherit;font-size:.86rem;font-weight:700;cursor:pointer}
+.pg-open:active{background:var(--navy);color:#fff}
+.pg-open-top{margin:.9rem 0 0;padding:.95rem 1rem;font-size:1rem;background:linear-gradient(135deg,#f3d27a 0%,#d4a93c 55%,#b88a24 100%);color:#0a1a3a;border:0;border-radius:6px;box-shadow:0 6px 18px rgba(212,169,60,.45),0 0 0 2px rgba(255,255,255,.18) inset;letter-spacing:.03em}
+.pg-open-top:active{filter:brightness(.92)}
+.pg-modal{position:fixed;inset:0;background:rgba(5,13,32,.55);display:none;align-items:flex-end;justify-content:center;z-index:1000;padding:0}
+.pg-modal.show{display:flex}
+.pg-sheet{background:#fff;width:100%;max-width:560px;max-height:88vh;border-radius:14px 14px 0 0;overflow:auto;font-size:.8rem;color:var(--muted);line-height:1.7;-webkit-overflow-scrolling:touch}
+@media(min-width:640px){.pg-modal{align-items:center;padding:1rem}.pg-sheet{border-radius:8px}}
+.pg-sheet-head{position:sticky;top:0;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:.75rem .9rem;z-index:1}
+.pg-sheet-title{font-weight:700;font-size:.92rem}
+.pg-close{background:none;border:0;color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;padding:0 .2rem}
+.pg-sheet .pay-guide-body{padding:.2rem .9rem 1rem}
 </style>
 </head>
 <body>
@@ -194,6 +223,7 @@ select:focus{outline:none;border-color:var(--navy);}
     <div class="hero-stats">
       <div class="hero-stat"><span>カスタマー料</span><strong>¥15,400</strong></div>
     </div>
+    <button type="button" class="pg-open pg-open-top" onclick="openPayGuide()">💡 支払い方法はこちら</button>
   </div>
   <button class="admin-gear" id="adminGear">⚙</button>
 </header>
@@ -269,6 +299,8 @@ select:focus{outline:none;border-color:var(--navy);}
         <button class="pay-tab" onclick="setPayTab(this,'cash')">現金<br><small style="font-weight:400">円（¥）</small></button>
       </div>
     </div>
+
+
     <div class="summary-card">
       <div class="sum-sec-title">料金内訳</div>
       <div class="sum-row"><span class="sum-lbl">商品代金</span><span class="sum-val" id="sumProd">—</span></div>
@@ -294,6 +326,63 @@ select:focus{outline:none;border-color:var(--navy);}
       <button class="copy-btn" id="copyBtn" onclick="doCopy()" disabled>クリップボードにコピー</button>
     </div>
     <div class="footnote">※ 本計算はあくまでも目安です。<br>※ 実際のお支払い金額は担当者にご確認ください。</div>
+  </div>
+</div>
+
+<div class="pg-modal" id="payGuideModal" onclick="closePayGuide()" aria-hidden="true">
+  <div class="pg-sheet" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="payGuideTitle">
+    <div class="pg-sheet-head">
+      <div class="pg-sheet-title" id="payGuideTitle">お支払い方法のご案内</div>
+      <button type="button" class="pg-close" onclick="closePayGuide()" aria-label="閉じる">×</button>
+    </div>
+    <div class="pay-guide-body">
+        <p class="pay-guide-lead">お支払いは <b>カード・USDT・ポイント・現金</b> からお選びいただけます。お手続きはすべて <b>FラインサポートのLINE</b> で承ります。</p>
+
+        <div class="pg-card">
+          <div class="pg-head"><span class="pg-ico">💳</span>カード払い</div>
+          <ul>
+            <li><b>紹介者IDのパスワード</b>が必要です。</li>
+            <li><b>登録日の 23:59 まで</b>に決済をお願いします。</li>
+            <li>決済ができなかった場合は、<b>決済希望日</b>とあわせて LINE にご連絡ください。</li>
+          </ul>
+        </div>
+
+        <div class="pg-card">
+          <div class="pg-head"><span class="pg-ico">💰</span>USDT 払い</div>
+          <p>以下のウォレットへ送金してください。</p>
+          <div class="pg-addr">
+            <div class="pg-addr-lbl">TRC20</div>
+            <code id="usdtAddr">TWw7GkzAjRLjYGmBHMzJ2273g2pR5NKezF</code>
+            <button type="button" class="pg-copy" onclick="copyUsdtAddr(this)">アドレスをコピー</button>
+          </div>
+          <p>送金後、次の 2 つを LINE にお送りください。</p>
+          <ul>
+            <li><b>トランザクションID</b></li>
+            <li><b>送金日時がわかる画面</b>（スクリーンショット）</li>
+          </ul>
+        </div>
+
+        <div class="pg-card">
+          <div class="pg-head"><span class="pg-ico">⭐</span>ポイント払い</div>
+          <p><b>最大 3 名まで</b>ポイントを合算できます。以下を LINE にご連絡ください。</p>
+          <ul>
+            <li>会員ID</li>
+            <li>お名前</li>
+            <li>お支払い金額</li>
+            <li>パスワード</li>
+          </ul>
+        </div>
+
+        <div class="pg-card">
+          <div class="pg-head"><span class="pg-ico">💴</span>現金払い</div>
+          <ul>
+            <li><b>事前のお振り込み</b>が必要です。</li>
+            <li>お振込先は、事前に LINE でご確認ください。</li>
+          </ul>
+        </div>
+
+        <a class="pg-line" href="https://lin.ee/tACQyKE" target="_blank" rel="noopener">FラインサポートのLINEはこちら ↗</a>
+    </div>
   </div>
 </div>
 <div class="image-modal" id="imageModal" onclick="closeProductImage()" aria-hidden="true">
@@ -603,6 +692,18 @@ function doCopy(){
 }
 
 setType("new");
+</script>
+<script>
+
+function openPayGuide(){var m=document.getElementById('payGuideModal');m.classList.add('show');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+function closePayGuide(){var m=document.getElementById('payGuideModal');m.classList.remove('show');m.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closePayGuide();});
+function copyUsdtAddr(btn){
+  var t=document.getElementById('usdtAddr').textContent.trim();
+  var done=function(){btn.textContent='コピーしました';btn.classList.add('done');setTimeout(function(){btn.textContent='アドレスをコピー';btn.classList.remove('done');},1800);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(function(){window.prompt('長押しでコピーしてください',t);});}
+  else{window.prompt('長押しでコピーしてください',t);}
+}
 </script>
 </body>
 </html>
